@@ -1,0 +1,54 @@
+
+<div class="container-no-parent-selector">
+
+<div style="float: right">
+  <button (click)="submit()" style="width: 100px;height:40px; align-content: center">Query Securities</button>
+</div>
+
+
+<div *ngIf="showData">
+  <h3>Tickers</h3>
+  <div style="height: 100%; width: 100%; float: left;padding-bottom: 50px;font-size: 12px">
+    <div class="row">
+      <div class="table table-bordered table-color detail-table mg-bottom30">
+        <table class="table-bordered table-color-blue no-mg">
+          <tbody>
+          <tr *ngFor="let row of tickers; let rowIndex=index">
+            <td>{{row.Source}}</td>
+            <td>{{row.Symbol}}</td>
+            <td>{{row.Securtity}}</td>
+            <td>{{row.Sector}}</td>
+            <td>{{row.SubIndustry}}</td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!showData">
+  <h3>Time Series Data Points</h3>
+  <div style="height: 100%; width: 100%; float: left;padding-bottom: 50px;font-size: 12px">
+    <div class="row">
+      <div class="table table-bordered table-color detail-table mg-bottom30">
+        <table class="table-bordered table-color-blue no-mg">
+          <tbody>
+          <tr *ngFor="let row of timeSeriesDataPoint; let rowIndex=index">
+            <td>{{row.Source}}</td>
+            <td>{{row.Symbol}}</td>
+            <td>{{row.Date}}</td>
+            <td>{{row.Close}}</td>
+
+            <!--<td *ngFor="let col of row; let colIndex=index">-->
+              <!--<div>{{col.Symbol}}</div>-->
+            <!--</td>-->
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
