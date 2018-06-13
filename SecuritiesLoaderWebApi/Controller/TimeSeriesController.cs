@@ -80,7 +80,7 @@ namespace SecuritiesLoaderWebApi.Controller
 
 		[AllowAnonymous]
 		[ResponseType(typeof(IEnumerable<DataPoint>))]
-		public async Task<IHttpActionResult> GetSecurityDataPoints(string start_date, string end_date,string sector=null, string subIndustry = null, string source = null, string order=null, string orderField=null)
+		public async Task<IHttpActionResult> GetSecurityDataPoints(string start_date, string end_date, string symbol=null,string sector=null, string subIndustry = null, string source = null, string order=null, string orderField=null)
 		{
 			sector = sector == "null" ? string.Empty : sector;
 			subIndustry = subIndustry == "null" ? string.Empty : subIndustry;
@@ -106,6 +106,14 @@ namespace SecuritiesLoaderWebApi.Controller
 			if (!string.IsNullOrEmpty(orderField) && !fields.Contains(orderField))
 				return BadRequest("An order field can be only either: Sector,SubIndustry,Source");
 
+
+			if (!string.IsNullOrEmpty(symbol))
+			{
+				var securityDataPoints = await SecuritiesService.GetSecuritiesTimeSeries(symbol, startDate, endDate, order, source);
+				Trace.TraceInformation("GetDataPoints queries");
+				return Ok(securityDataPoints);
+			}
+			
 
 			var securityQuery = new SecurityQuery
 			{
