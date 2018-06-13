@@ -15,6 +15,9 @@ namespace Core.Interfaces.Services
 		string SourceList { get; }
 
 		[OperationContract]
+		Task<IEnumerable<Ticker>> GetTickers();
+
+		[OperationContract]
 		Task<IEnumerable<DataPoint>> GetSecuritiesTimeSeries(string symbol, DateTime startDate, DateTime endDate,string order,string source);
 
 		[OperationContract]

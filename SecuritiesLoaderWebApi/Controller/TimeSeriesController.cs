@@ -28,6 +28,25 @@ namespace SecuritiesLoaderWebApi.Controller
 			_sourceHierarchy = ConfigurationManager.AppSettings["SourceHierarchy"];
 		}
 
+		//TODO: we can cache the static and queried data on request or on startup.		
+		[HttpGet]
+		[Route("Tickers")]
+		[ActionName("Tickers")]
+		[AllowAnonymous]
+		[ResponseType(typeof(IEnumerable<Ticker>))]
+		public async Task<IHttpActionResult> GetTickers()
+		{
+
+			//we can log to db as well. but trace logs to the service logger and can be accessed if migrated to azure
+			Trace.TraceInformation("GetTickers request");
+
+			var tickers = await SecuritiesService.GetTickers();
+
+			Trace.TraceInformation("GetTickers queries");
+			return Ok(tickers);
+
+		}
+
 
 		[HttpGet]
 		[Route("DataPoints")]
@@ -61,13 +80,19 @@ namespace SecuritiesLoaderWebApi.Controller
 
 		[AllowAnonymous]
 		[ResponseType(typeof(IEnumerable<DataPoint>))]
-		public async Task<IHttpActionResult> GetMultiSecurityDataPoints(string start_date, string end_date,string sector=null, string subIndustry = null, string source = null, string order=null, string orderField=null)
+		public async Task<IHttpActionResult> GetSecurityDataPoints(string start_date, string end_date,string sector=null, string subIndustry = null, string source = null, string order=null, string orderField=null)
 		{
+			sector = sector == "null" ? string.Empty : sector;
+			subIndustry = subIndustry == "null" ? string.Empty : subIndustry;
+			source = source == "null" ? string.Empty : source;
+			order = order == "null" ? string.Empty : order;
+			orderField = orderField == "null" ? string.Empty : orderField;
+
 
 			//we can log to db as well. but trace logs to the service logger and can be accessed if migrated to azure
 			Trace.TraceInformation("GetDataPoints request");
 
-			if (!DateTime.TryParse(start_date, out var startDate) || !DateTime.TryParse(start_date, out var endDate))
+			if (!DateTime.TryParse(start_date, out var startDate) || !DateTime.TryParse(end_date, out var endDate))
 				return BadRequest("Date Format is not correct. Please pass in format: dd-mmm-yyyy");
 
 

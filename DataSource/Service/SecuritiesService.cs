@@ -114,6 +114,17 @@ namespace DataSource.Service
 		}
 
 
+		public async Task<IEnumerable<Ticker>> GetTickers()
+		{
+			return await Task.Run(() =>
+			{
+
+				return DbContext.Ticker.ToList();
+			});
+
+			
+		}
+
 		public async Task<IEnumerable<DataPoint>> GetSecuritiesTimeSeries(string symbol,DateTime startDate, DateTime endDate,string order,string source)
 		{
 
