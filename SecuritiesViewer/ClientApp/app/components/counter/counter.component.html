@@ -1,7 +1,23 @@
-<h1>Counter</h1>
+<h1>Tick Data</h1>
 
-<p>This is a simple example of an Angular component.</p>
+<div *ngIf="showData">
+	<h3>Tickers</h3>
+	<div style="height: 100%; width: 100%; float: left;padding-bottom: 50px;font-size: 12px">
+		<div class="row">
+			<div class="table table-bordered table-color detail-table mg-bottom30">
+				<table class="table-bordered table-color-blue no-mg">
+					<tbody>
+					<tr *ngFor="let row of tickers; let rowIndex=index">
+						<td>{{row.Source}}</td>
+						<td>{{row.Symbol}}</td>
+						<td>{{row.Securtity}}</td>
+						<td>{{row.Sector}}</td>
+						<td>{{row.SubIndustry}}</td>
 
-<p>Current count: <strong>{{ currentCount }}</strong></p>
-
-<button (click)="incrementCounter()">Increment</button>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

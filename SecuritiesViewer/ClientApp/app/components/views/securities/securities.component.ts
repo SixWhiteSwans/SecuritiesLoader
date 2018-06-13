@@ -51,12 +51,12 @@ export class SecuritiesComponent implements OnInit {
     let startDate = "2018-01-01";
     let endDate = "2018-06-01";
 
-    let symbol:string=null;
+    let symbol:string='';
     let sector="Health Care";
-    let subIndustry:string=null;
-    let source:string=null;
-    let orderbyField:string=null;
-    let orderBy:string=null;
+	  let subIndustry: string = '';
+	  let source: string = '';
+	  let orderbyField: string = '';
+	  let orderBy: string = '';
 
     this.securitiesService.getSecuritiesTimeSeriesDataPoints(startDate,endDate,symbol,sector,subIndustry,source,orderbyField,orderBy).subscribe((tsdps:Array<TimeSeriesDataPoint>)=>{
       this.timeSeriesDataPoint=[];

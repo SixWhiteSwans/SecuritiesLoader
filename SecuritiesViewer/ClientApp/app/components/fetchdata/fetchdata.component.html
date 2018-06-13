@@ -1,24 +1,43 @@
-<h1>Weather forecast</h1>
+<h1>Securities Loader</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-<p *ngIf="!forecasts"><em>Loading...</em></p>
+<div style="float: right">
+	<button (click)="submit()" style="width: 100px;height:40px; align-content: center">Query Securities</button>
+</div>
 
-<table class='table' *ngIf="forecasts">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.dateFormatted }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
-        </tr>
-    </tbody>
-</table>
+
+<p *ngIf="!showData"><em>Loading...</em></p>
+
+
+<div *ngIf="!showData">
+	<h3>Time Series Data Points</h3>
+	<div style="height: 100%; width: 100%; float: left;padding-bottom: 50px;font-size: 12px">
+		<div class="row">
+			<div class="table table-bordered table-color detail-table mg-bottom30">
+				<table class="table-bordered table-color-blue no-mg">
+					<thead>
+					<tr>
+						<th>Source</th>
+						<th>Symbol</th>
+						<th>Date</th>
+						<th>Close</th>
+					</tr>
+					</thead>
+					
+
+					<tbody>
+					<tr *ngFor="let row of timeSeriesDataPoint; let rowIndex=index">
+						<td>{{row.Source}}</td>
+						<td>{{row.Symbol}}</td>
+						<td>{{row.Date}}</td>
+						<td>{{row.Close}}</td>
+
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
