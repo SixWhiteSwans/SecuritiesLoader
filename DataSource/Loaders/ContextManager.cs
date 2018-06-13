@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Core.Model;
 using DataSource.Configuration;
@@ -37,7 +34,7 @@ namespace DataSource.Loaders
 			Console.WriteLine(progress.Message);
 		}
 
-		
+
 
 
 
@@ -48,7 +45,7 @@ namespace DataSource.Loaders
 				var stopWatch = new Stopwatch();
 				stopWatch.Start();
 
-				if(string.IsNullOrEmpty(source))
+				if (string.IsNullOrEmpty(source))
 					source = timeSeriesDataPoints.ToList().ElementAt(0).Source;
 
 
@@ -60,7 +57,7 @@ namespace DataSource.Loaders
 					//delete all timeseries from source - assuming a bcp operation
 					//todo: implement a sql bcp program from git to evaluate speed increase.
 					//https://github.com/ErikEJ/SqlCeBulkCopy
-					
+
 					//step 2:
 					//exlude all tsdp where ticker is not setup.
 
@@ -69,11 +66,11 @@ namespace DataSource.Loaders
 
 					//step 4
 					//upload tsdp
-					
-					progress?.Report(GetProgressManager($"Bulk update: Removing all timeseries from source  {source}", source));
+
 					//remove all data from the source
 					if (timeSeriesDataPoints.Any() && ctx.TimeSeries.Any())
 					{
+						progress?.Report(GetProgressManager($"Bulk update: Removing all timeseries from source  {source}", source));
 						ctx.TimeSeries.RemoveRange(ctx.TimeSeries.Where(x => x.Source.Equals(source)));
 						ctx.SaveChanges();
 					}
@@ -82,19 +79,20 @@ namespace DataSource.Loaders
 					//handling duplicate data: source,symbol,date
 					//distinct timeseries data set only: remove any items which have dups.
 					List<TimeSeriesDataPoint> distinctTimeSeriesDataPoints = timeSeriesDataPoints
-						.GroupBy(t => new {t.Source, t.Symbol, t.Date})
-						.Select(g => g.First())
-						.ToList();
+								   .GroupBy(t => new { t.Source, t.Symbol, t.Date })
+								   .Select(g => g.First())
+								   .ToList();
 
+					var tickers = ctx.Ticker.ToList();
 
 					//tickers not setup in goldern source
-					var tickersWhereTickerIsNotSetup = distinctTimeSeriesDataPoints.Where(x => !ctx.Ticker.Any(y => y.Symbol.Equals(x.Symbol)))
-						.Select(x => new Ticker() {Symbol = x.Symbol, Source = x.Source}).DistinctBy(x => x.Symbol).ToList();
+					var tickersWhereTickerIsNotSetup = distinctTimeSeriesDataPoints.Where(x => !tickers.Any(y => y.Symbol.Equals(x.Symbol)))
+								   .Select(x => new Ticker() { Symbol = x.Symbol, Source = x.Source }).DistinctBy(x => x.Symbol).ToList();
 
 
 					//process invalid tickers
 					progress?.Report(GetProgressManager($"Processing invalid tickers started  {source}", source));
-					var invalidTickerDataPointErrorLog = tickersWhereTickerIsNotSetup.Select(ticker =>{return DataValidationRules.IsTimeSeriesDataValid(ticker);});
+					var invalidTickerDataPointErrorLog = tickersWhereTickerIsNotSetup.Select(ticker => { return DataValidationRules.IsTimeSeriesDataValid(ticker); });
 					var dataPointErrorLogs = GetTickerDataPointErrorLog(invalidTickerDataPointErrorLog).ToList();
 
 					if (dataPointErrorLogs.Any())
@@ -102,7 +100,7 @@ namespace DataSource.Loaders
 						ctx.DataErrorLog.AddRange(dataPointErrorLogs);
 						await ctx.SaveChangesAsync();
 					}
-					
+
 					progress?.Report(GetProgressManager($"Processing invalid tickers completed {source}", source));
 
 
@@ -111,7 +109,7 @@ namespace DataSource.Loaders
 					progress?.Report(GetProgressManager($"Processing invalid timeseries data points started  {source}", source));
 
 					var timeSeriesDataPointsWhereTickerIsSetup =
-						distinctTimeSeriesDataPoints.Where(x => !tickersWhereTickerIsNotSetup.Any(y => y.Symbol.Equals(x.Symbol))).ToList();
+								   distinctTimeSeriesDataPoints.Where(x => !tickersWhereTickerIsNotSetup.Any(y => y.Symbol.Equals(x.Symbol))).ToList();
 					//validate tickers - close and outliers etc.
 
 					var validatedTimeSeriesDataPoint = timeSeriesDataPointsWhereTickerIsSetup.Select(timeSeries => { return DataValidationRules.IsTimeSeriesDataValid(timeSeries); });
@@ -128,7 +126,7 @@ namespace DataSource.Loaders
 						ctx.DataErrorLog.AddRange(timeSeriesDataPointErrorLogs);
 						await ctx.SaveChangesAsync();
 					}
-					
+
 					progress?.Report(GetProgressManager($"Processing invalid time series data point completed  {source}", source));
 
 
@@ -149,70 +147,70 @@ namespace DataSource.Loaders
 				}
 
 
-				//	var count = 0;
-				//	//todo make parallel
-				//	foreach (var timeSeriesDataPoint in distinctTimeSeriesDataPoints)
-				//	{
+				//            var count = 0;
+				//            //todo make parallel
+				//            foreach (var timeSeriesDataPoint in distinctTimeSeriesDataPoints)
+				//            {
 
-				//		var ticker = ctx.Ticker.Find(timeSeriesDataPoint.Symbol);
+				//                           var ticker = ctx.Ticker.Find(timeSeriesDataPoint.Symbol);
 
-				//		var tickerValidation = DataValidationRules.IsTimeSeriesDataValid(ticker);
-				//		if (!tickerValidation.Value)
-				//		{
-				//			var dpel = GetDataPointErrorLog(tickerValidation, timeSeriesDataPoint);
-				//			ctx.DataErrorLog.Add(dpel);
+				//                           var tickerValidation = DataValidationRules.IsTimeSeriesDataValid(ticker);
+				//                           if (!tickerValidation.Value)
+				//                           {
+				//                                          var dpel = GetDataPointErrorLog(tickerValidation, timeSeriesDataPoint);
+				//                                          ctx.DataErrorLog.Add(dpel);
 
-				//			continue;
+				//                                          continue;
 
-				//		}
-
-
-				//		var tsdpValidation = DataValidationRules.IsTimeSeriesDataValid(timeSeriesDataPoint);
-				//		if (!tsdpValidation.Value)
-				//		{
-
-				//			var dpel = GetDataPointErrorLog(tsdpValidation, timeSeriesDataPoint);
-				//			ctx.DataErrorLog.Add(dpel);
-
-				//			continue;
-				//		}
+				//                           }
 
 
+				//                           var tsdpValidation = DataValidationRules.IsTimeSeriesDataValid(timeSeriesDataPoint);
+				//                           if (!tsdpValidation.Value)
+				//                           {
+
+				//                                          var dpel = GetDataPointErrorLog(tsdpValidation, timeSeriesDataPoint);
+				//                                          ctx.DataErrorLog.Add(dpel);
+
+				//                                          continue;
+				//                           }
 
 
 
 
-				//		ctx.TimeSeries.Add(timeSeriesDataPoint);
+
+
+				//                           ctx.TimeSeries.Add(timeSeriesDataPoint);
 
 
 
-				//		count++;
+				//                           count++;
 
-				//		if (count % 1000 != 0) continue;
-				//		progressItem = new ProgressManager
-				//		{
-				//			TimeStamp = DateTime.UtcNow,
-				//			Progress = 1,
-				//			Action = source,
-				//			Message = "Still populating record count" + count
-				//		};
-				//		progress?.Report(progressItem);
-				//		await ctx.SaveChangesAsync();
-				//	}
+				//                           if (count % 1000 != 0) continue;
+				//                           progressItem = new ProgressManager
+				//                           {
+				//                                          TimeStamp = DateTime.UtcNow,
+				//                                          Progress = 1,
+				//                                          Action = source,
+				//                                          Message = "Still populating record count" + count
+				//                           };
+				//                           progress?.Report(progressItem);
+				//                           await ctx.SaveChangesAsync();
+				//            }
 				//}
 
 				//progressItem = new ProgressManager
 				//{
-				//	TimeStamp = DateTime.UtcNow,
-				//	Progress = 1,
-				//	Action = source,
-				//	Message = "PopulateTimeSeriesDataPoint Completed"
+				//            TimeStamp = DateTime.UtcNow,
+				//            Progress = 1,
+				//            Action = source,
+				//            Message = "PopulateTimeSeriesDataPoint Completed"
 				//};
 
 				//progress?.Report(progressItem);
 
-				}
-				catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				return new ContextLoaderDataValidation(false, e.InnerException.ToString());
 
@@ -223,7 +221,7 @@ namespace DataSource.Loaders
 
 
 
-		private static ProgressManager GetProgressManager(string message,string source)
+		private static ProgressManager GetProgressManager(string message, string source)
 		{
 			var progressItem = new ProgressManager
 			{
@@ -291,14 +289,14 @@ namespace DataSource.Loaders
 					var distinctTickers = validTickers.DistinctBy(x => x.Symbol).ToList();
 
 					ctx.Ticker.AddRange(distinctTickers);
-					await ctx.SaveChangesAsync();
+					ctx.SaveChanges();
 
 
 					stopWatch.Stop();
 
 
 					progress?.Report(GetProgressManager(
-						$"Processing valid tickers completed: {source}, Elapsed Seconds {stopWatch.Elapsed.TotalSeconds}", source));
+								   $"Processing valid tickers completed: {source}, Elapsed Seconds {stopWatch.Elapsed.TotalSeconds}", source));
 
 				}
 
@@ -315,11 +313,11 @@ namespace DataSource.Loaders
 		}
 
 
-	
+
 		//assign an interface so we get the items properties
 		private static IEnumerable<DataPointErrorLog> GetTimeSeriesDataDataPointErrorLog(IEnumerable<LoaderDataValidation<TimeSeriesDataPoint>> inValidData)
 		{
-			
+
 			var dataPointErrorLogs = inValidData.Select(dataLoadValidation =>
 			{
 				var dpel = new DataPointErrorLog
@@ -345,7 +343,7 @@ namespace DataSource.Loaders
 		/// <returns></returns>
 		private static IEnumerable<DataPointErrorLog> GetTickerDataPointErrorLog(IEnumerable<LoaderDataValidation<Ticker>> inValidData)
 		{
-			
+
 			var dataPointErrorLogs = inValidData.Select(dataLoadValidation =>
 			{
 				var dpel = new DataPointErrorLog
@@ -366,3 +364,4 @@ namespace DataSource.Loaders
 		}
 	}
 }
+

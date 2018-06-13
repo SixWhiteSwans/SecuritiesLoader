@@ -17,7 +17,7 @@ namespace SelfHostingSecuritiesLoader
 			{
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-
+				Console.WriteLine("Securities Batch Loader Started");
 
 				var task = TimeSeriesBatchJob.RunTickerLoader().ContinueWith((t) =>
 				{
@@ -52,7 +52,7 @@ namespace SelfHostingSecuritiesLoader
 				Task.WaitAll(task);
 
 				stopwatch.Stop();
-				Console.WriteLine($"Total Seconds {stopwatch.Elapsed.TotalSeconds}");
+				Console.WriteLine($"Securities Batch Loader Completed:  Total Seconds {stopwatch.Elapsed.TotalSeconds}");
 
 
 
