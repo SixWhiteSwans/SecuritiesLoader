@@ -13,7 +13,7 @@ using NUnit.Framework.Internal;
 namespace DataSource.Tests
 {
 	[TestFixture()]
-	public class SecurityServiceINtergrationTest
+	public class SecurityServiceIntergrationTest
 	{
 		private ISecuritiesService SecuritiesService;
 

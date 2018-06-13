@@ -26,7 +26,7 @@ namespace DataSource.Tests
 			_filePath = @"C: \Users\Anthony Johnson\hsbc_codeproject\SecuritiesLoader\Data\";
 		}
 
-		[TestCase("StocksPrices-ALICE.csv", " ConfigurationManager.AppSettings[x.FileName];")]
+		[TestCase("StocksPrices-ALICE.csv", "ALICE")]
 		public void LoadSecurities(string fileName, string source)
 		{
 			var fileLocation = string.Concat(_filePath, fileName);

@@ -18,9 +18,9 @@ namespace Core.Tests
 				OrderBy = "ASC",
 				OrderByField = "Sector"
 			};
-
+			 
 			var sql = sq.GetTickerSql();
-			StringAssert.AreEqualIgnoringCase("Sector=\"Health Care\" SubIndustry=\"Health Care Equipment\" Source=\"ALICE\" OrderBy=\"Sector\" ASC", sql);
+			StringAssert.AreEqualIgnoringCase("SELECT * FROM Tickers WHERE Sector=\'Health Care\' AND SubIndustry=\'Health Care Equipment\'", sql);
 
 		}
 

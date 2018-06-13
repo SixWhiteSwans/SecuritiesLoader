@@ -46,13 +46,9 @@ namespace DataSource.Loaders
 					//;HDR=yes
 					//;Format=xlsx;IMEX=1
 					
-					
-					
 					var oledbConn = new System.Data.OleDb.OleDbConnection(oleDbConnectionString.Value);
 
 					var command = new System.Data.OleDb.OleDbDataAdapter(oleDbConnectionString.Sql, oledbConn);
-
-
 
 					command.TableMappings.Add("Table", "LoadTable");
 					var dtSet = new DataSet();

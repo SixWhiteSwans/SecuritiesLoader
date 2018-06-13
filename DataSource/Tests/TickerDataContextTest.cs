@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace DataSource.Tests
 {
+	[Ignore("Not required")]
 	[TestFixture]
 	public class TickerDataContextTest:IDisposable
 	{

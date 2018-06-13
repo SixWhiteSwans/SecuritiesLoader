@@ -74,7 +74,7 @@ namespace DataSource.Loaders
 					{
 						progress?.Report(GetProgressManager($"Bulk update: Removing all timeseries from source  {source}", source));
 						ctx.TimeSeries.RemoveRange(ts.Where(x => x.Source.Equals(source)));
-						await ctx.SaveChangesAsync()();
+						await ctx.SaveChangesAsync();
 					}
 
 					//we want to make the index on the db source,symbol,date

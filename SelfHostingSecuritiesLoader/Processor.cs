@@ -44,11 +44,6 @@ namespace SelfHostingSecuritiesLoader
 				});
 
 
-
-
-
-
-
 				Task.WaitAll(task);
 
 				stopwatch.Stop();

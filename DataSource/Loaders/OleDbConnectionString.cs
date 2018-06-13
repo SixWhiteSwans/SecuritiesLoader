@@ -33,9 +33,13 @@ namespace DataSource.Loaders
 
 			if (fileInfo.FileType == FileTypes.Excel)
 			{
-				Value =
-					$"provider = Microsoft.Jet.OLEDB.4.0; Data Source = '{fileInfo.Value.FullName}'; Extended Properties = Excel 8.0;";
+				//Value =
+				//	$"provider = Microsoft.Jet.OLEDB.4.0; Data Source = '{fileInfo.Value.FullName}'; Extended Properties = Excel 8.0;";
 
+				Value =
+					$"provider = Microsoft.ACE.OLEDB.12.0; Data Source = '{fileInfo.Value.FullName}'; Extended Properties = Excel 12.0;";
+
+				
 				return;
 			}
 
@@ -47,8 +51,8 @@ namespace DataSource.Loaders
 				TableName = $"[{fileInfo.Value.Name}$]";
 				Sql = $"select * from [{fileInfo.Value.Name}]";
 
-				var provider = $"provider = Microsoft.Jet.OLEDB.4.0; Data Source = '{fileInfo.Value.Directory}\\';";
-
+				//var provider = $"provider = Microsoft.Jet.OLEDB.4.0; Data Source = '{fileInfo.Value.Directory}\\';";
+				var provider = $"provider = Microsoft.ACE.OLEDB.12.0; Data Source = '{fileInfo.Value.Directory}\\';";
 				Value = string.Concat(provider, "Extended Properties = 'text;HDR=Yes;FMT=Delimited(,)'; ");
 				
 			}

@@ -100,7 +100,7 @@ namespace SecuritiesLoaderWebApi.IntergrationTest
 		    var response = _server.HttpClient.GetAsync(url);
 		    var result = response.Result.Content.ReadAsAsync<IEnumerable<DataPoint>>();
 
-		    Assert.AreEqual(result.Result.Count(), 25);
+		    Assert.AreEqual(1402,result.Result.Count());
 
 
 	    }

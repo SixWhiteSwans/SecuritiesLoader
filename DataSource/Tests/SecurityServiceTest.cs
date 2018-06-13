@@ -12,6 +12,7 @@ using NUnit.Framework.Internal;
 
 namespace DataSource.Tests
 {
+	[Ignore("Not ready")]
 	[TestFixture()]
 	public class SecurityServiceTest
 	{
