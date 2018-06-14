@@ -67,6 +67,8 @@ namespace DataSource.Loaders
 					//step 4
 					//upload tsdp
 
+
+					//TODO: test if a stored proce is quicker
 					var ts = ctx.TimeSeries.ToList();
 
 					//remove all data from the source
