@@ -26,7 +26,7 @@ export class FetchDataComponent {
 
 		this.showData = false;
 		let startDate = "2018-01-01";
-		let endDate = "2018-06-01";
+		let endDate = "2018-02-01";
 
 		let symbol: string ='' ;
 		let sector = "Health Care";
