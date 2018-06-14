@@ -9,6 +9,9 @@ Part 2:
 
 Part 3:
 	This is the R solution but it has not been completed yet.
+	
+	
+Please note: The config file for the load data is SelfHostingSecuritiesLoader, file: app.config
 
 
 	
