@@ -82,7 +82,8 @@ namespace DataSource.Loaders
 
 			var tasks = validatedData.Select(async (validFileInfo) => await TimeSeriesDataPointLoadManager.GetTimeSeries(validFileInfo));
 			
-
+			//note: this wait can be taken out to improve performance, but for the moment the load all files are read then the db update is completed.
+			//this can be async up to combine the two processes together.
 			var timeSeriesDataPoints = await Task.WhenAll(tasks);
 
 
