@@ -9,13 +9,16 @@ namespace SecuritiesViewerR
 {
 	class Program
 	{
+		private static readonly string BaseAddress = "http://localhost:8080/";
+		private static readonly string ApiBaseRequestPath = "api/timeseries/";
+
 		static void Main(string[] args)
 		{
 			using (REngine engine = REngine.GetInstance())
 			{
 				engine.Initialize();
 
-				var result = EvaluateExpression(engine, "5+2+9");
+				var result = EvaluateExpression(engine);
 
 				Console.Write(result);
 				Console.ReadKey();
@@ -23,19 +26,20 @@ namespace SecuritiesViewerR
 
 		}
 
-		private static double EvaluateExpression(REngine engine, string expression)
+		private static object EvaluateExpression(REngine engine)
 		{
-			var expressionVector = engine.CreateCharacterVector(new[] { expression });
-			engine.SetSymbol("expr", expressionVector);
+	
+			var startDate = DateTime.Parse("01/01/2018");
+			var endDate = DateTime.Parse("01/06/2018");
+			var symbol = "AAPL";
 
-			//  WRONG -- Need to parse to expression before evaluation
-			//var result = engine.Evaluate("eval(expr)");
+			var time_slice = $"start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}";
+			var url = $"{ApiBaseRequestPath}securitydatapoints?{time_slice}&symbol={symbol}";
+			
+			var result = engine.Evaluate($"symbolData <-fromJSON({url})");
+			
 
-			//  RIGHT way to do this!!!
-			var result = engine.Evaluate("eval(parse(text=expr))");
-			var ret = result.AsNumeric().First();
-
-			return ret;
+			return result;
 		}
 	}
 }
