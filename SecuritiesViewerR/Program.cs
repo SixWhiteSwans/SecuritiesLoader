@@ -13,33 +13,40 @@ namespace SecuritiesViewerR
 		private static readonly string ApiBaseRequestPath = "api/timeseries/";
 
 		static void Main(string[] args)
-		{
-			using (REngine engine = REngine.GetInstance())
-			{
-				engine.Initialize();
+            {
+                            using (REngine engine = REngine.GetInstance())
+                            {
+                                        engine.Initialize();
 
-				var result = EvaluateExpression(engine);
+                                        EvaluateExpression(engine);
 
-				Console.Write(result);
-				Console.ReadKey();
-			}
+                                        Console.Write(result);
+                                        Console.ReadKey();
+                            }
 
-		}
+            }
 
-		private static object EvaluateExpression(REngine engine)
-		{
-	
-			var startDate = DateTime.Parse("01/01/2018");
-			var endDate = DateTime.Parse("01/06/2018");
-			var symbol = "AAPL";
+            private static void EvaluateExpression(REngine engine)
+            {
+                              
 
-			var time_slice = $"start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}";
-			var url = $"{ApiBaseRequestPath}securitydatapoints?{time_slice}&symbol={symbol}";
-			
-			var result = engine.Evaluate($"symbolData <-fromJSON({url})");
-			
+                            var lib = "jsonlite";
 
-			return result;
-		}
+                            var stringBuilder = new StringBuilder();
+                            stringBuilder.AppendLine("library(\"jsonlite\")");
+                            stringBuilder.AppendLine("url<-\"http://localhost:8080/api/timeseries/tickers\"");
+                            stringBuilder.AppendLine("jsondata<-fromJSON(url)");
+                            stringBuilder.AppendLine("jsondata");
+
+
+                            var script = stringBuilder.ToString();
+
+
+                                             
+                            var result = engine.Evaluate(script);
+                              
+
+            }
+
 	}
 }
