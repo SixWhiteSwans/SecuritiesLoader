@@ -19,8 +19,7 @@ namespace SecuritiesViewerR
                                         engine.Initialize();
 
                                         EvaluateExpression(engine);
-
-                                        Console.Write(result);
+				
                                         Console.ReadKey();
                             }
 
