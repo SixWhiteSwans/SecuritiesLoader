@@ -8,7 +8,7 @@ Part 2:
 	Project 2: Angular front end	SecuritiesViewer
 
 Part 3:
-	This is the R solution but it has not been completed yet.
+	This is the R solution shows the tickers being loaded.
 	
 	
 Please note: The config file for the load data is SelfHostingSecuritiesLoader, file: app.config
