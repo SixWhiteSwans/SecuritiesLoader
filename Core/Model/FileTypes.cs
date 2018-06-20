@@ -5,7 +5,8 @@
 		Excel,
 		Csv,
 		Xml,
-		Json
+		Json,
+		Txt
 	
 	}
 

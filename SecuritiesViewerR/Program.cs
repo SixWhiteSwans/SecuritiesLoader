@@ -14,14 +14,14 @@ namespace SecuritiesViewerR
 
 		static void Main(string[] args)
             {
-                            using (REngine engine = REngine.GetInstance())
-                            {
-                                        engine.Initialize();
+                using (REngine engine = REngine.GetInstance())
+                {
+                            engine.Initialize();
 
-                                        EvaluateExpression(engine);
+                            EvaluateExpression(engine);
 				
-                                        Console.ReadKey();
-                            }
+                            Console.ReadKey();
+                }
 
             }
 
@@ -29,20 +29,19 @@ namespace SecuritiesViewerR
             {
                               
 
-                            var lib = "jsonlite";
+                var lib = "jsonlite";
 
-                            var stringBuilder = new StringBuilder();
-                            stringBuilder.AppendLine("library(\"jsonlite\")");
-                            stringBuilder.AppendLine("url<-\"http://localhost:8080/api/timeseries/tickers\"");
-                            stringBuilder.AppendLine("jsondata<-fromJSON(url)");
-                            stringBuilder.AppendLine("jsondata");
-
-
-                            var script = stringBuilder.ToString();
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine("library(\"jsonlite\")");
+                stringBuilder.AppendLine("url<-\"http://localhost:8080/api/timeseries/tickers\"");
+                stringBuilder.AppendLine("jsondata<-fromJSON(url)");
+                stringBuilder.AppendLine("jsondata");
 
 
-                                             
-                            var result = engine.Evaluate(script);
+                var script = stringBuilder.ToString();
+                                 
+                var result = engine.Evaluate(script);
+				Console.WriteLine(result);
                               
 
             }
